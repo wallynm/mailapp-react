@@ -12,8 +12,7 @@ var App = React.createClass({
     )
   }
 });
-
-var Button = React.createClass({
+class Button extends Component {
   render() {
     return (
       <a href="#send-mail" className="btn-success btn-new-message shadow-box">
@@ -24,7 +23,7 @@ var Button = React.createClass({
       </a>  
     )
   }
-})
+};
 
 class MailFilter extends Component {
 
