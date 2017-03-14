@@ -18,15 +18,15 @@ select(){
 render() {
   return(
     <li className={`label-color-${this.props.tag} ` + ((this.props.selected === this.props.item.id) ? 'active' : '')} onClick={this.select}>
-    {this.state.new === true &&
-      <div className="status-icon">
-        <i className="icon-circle-fill color-blue"/>
-      </div>
-    }
-    <div className="name">{this.props.item.name}</div>
-    <div className="title">{this.props.item.title}</div>
-    <div className="preview">{this.props.item.preview}...</div>
-    <time>{this.props.date}</time>
+      {this.state.new === true &&
+        <div className="status-icon">
+          <i className="icon-circle-fill color-blue"/>
+        </div>
+      }
+      <div className="name">{this.props.item.name}</div>
+      <div className="title">{this.props.item.title}</div>
+      <div className="preview">{this.props.item.preview}...</div>
+      <time>{this.props.date}</time>
     </li>
     )
   }
@@ -36,7 +36,8 @@ class MailList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: 1
+      selected: 0,
+      filter: {}
     };
     this.select = this.select.bind(this);
   }
@@ -45,8 +46,12 @@ class MailList extends Component {
     this.setState({ selected: itemID});
   }
 
-  render() {
-    let data = [{
+  filter(filter){
+    this.setState({filter: filter});
+  }
+
+  get data(){
+    return [{
       id: 1,
       name: "Lisa Guerrero",
       title: "Company Goals for 2016",
@@ -79,6 +84,26 @@ class MailList extends Component {
       tag: "blue",
       new: true
     }];
+  }
+
+  get dataItems(){
+    let data = _(this.data);
+    if(!_.isEmpty(this.state.filter)){
+      data = data.where(this.state.filter);
+    }
+
+    return data.value().map((item, key) =>
+      <MailListItem
+      key={key}
+      item={item}
+      select={this.select}
+      selected={this.state.selected}
+      />
+    );
+  }
+
+  render() {
+    console.info('render', this.dataItems);
 
     return (
       <div className="col-2 panel list-panel">
@@ -98,14 +123,7 @@ class MailList extends Component {
         </header>
 
         <ul className="mail-list">
-          {_.map(data, (item, key) =>
-            <MailListItem
-            key={key}
-            item={item}
-            select={this.select}
-            selected={this.state.selected}
-            />
-          )}
+          {this.dataItems}
         </ul>
       </div>
     );

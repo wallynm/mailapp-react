@@ -2,6 +2,36 @@ import React, { Component } from 'react';
 import Button from './button';
 
 export default class MailFilter extends Component {
+  get statusItems(){
+    let data = [{
+      color: 'orange',
+      name: 'Personal',
+      counter: 10
+    }, {
+      color: 'green',
+      name: 'Work',
+      counter: 10
+    }, {
+      color: 'purple',
+      name: 'Friends',
+      counter: 10
+    }, {
+      color: 'blue',
+      name: 'Personal',
+      counter: 10
+    }];
+
+    return data.map((item, key) =>
+      <MailStatus
+      key={key}
+      item={item}
+      color={item.color}
+      name={item.name}
+      counter={item.counter}
+      />
+    );
+  }
+
   render() {
     return (
       <div className="col-1 panel sidebar">
@@ -38,32 +68,22 @@ export default class MailFilter extends Component {
 
         <ul className="mail-status">
           <label>Labels</label>
-          <li>
-            <i className="icon-circle color-orange"></i>
-            <span className="name">Personal</span>
-            <span className="counter">10</span>
-          </li>
-          <li>
-            <i className="icon-circle color-green"></i>
-            <span className="name">Work</span>
-            <span className="counter">10</span>
-          </li>
-          <li>
-            <i className="icon-circle color-purple"></i>
-            <span className="name">Friends</span>
-            <span className="counter">10</span>
-          </li>
-          <li>
-            <i className="icon-circle color-blue"></i>
-            <span className="name">Personal</span>
-            <span className="counter">10</span>
-          </li>
-          <li>
-            <i className="icon-add"></i>
-            <span className="name">Add</span>
-          </li>
+          {this.statusItems}
         </ul>
       </div>
     );
   }
 };
+
+
+class MailStatus extends Component {
+  render() {
+    return (
+      <li>
+        <i className={`icon-circle color-${this.props.color}`}></i>
+        <span className="name">{this.props.name}</span>
+        <span className="counter">{this.props.counter}</span>
+      </li>
+    );
+  }
+}
