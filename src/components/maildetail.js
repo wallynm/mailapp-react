@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 
-const MailDetail = (props) => {
+export class MailDetail extends Component {
+  render() {
   let styleDetail = {
     backgroundImage: 'url(https://pbs.twimg.com/profile_images/507626256100110338/pK3qZBAq.jpeg)'
   }
 
-  if(_.isEmpty(props.data))
+  if(_.isEmpty(this.props.mail))
     return null;
+
   return (
     <div className="col-3 mail-content">
       <header>
@@ -47,11 +49,12 @@ const MailDetail = (props) => {
           <span className="mail-title">Design for Health Project</span>
         </div>
         <div className="mail-body">
-          {props.mail.body}
+          {this.props.mail.body}
         </div>
     </div>
   </div>
   )
+  }
 }
 
 export default MailDetail;
