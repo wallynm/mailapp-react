@@ -4,21 +4,17 @@ import _ from 'lodash';
 class MailListItem extends Component {
  constructor(props) {
   super(props);
-  this.state = {
-    new: props.item.new
-  };
   this.select = this.select.bind(this);
 }
 
 select(){
-  this.setState({new: false});
   this.props.select(this.props.item.id);
 }
 
 render() {
   return(
     <li className={`label-color-${this.props.tag} ` + ((this.props.selected === this.props.item.id) ? 'active' : '')} onClick={this.select}>
-      {this.state.new === true &&
+      {this.props.item.new === true &&
         <div className="status-icon">
           <i className="icon-circle-fill color-blue"/>
         </div>
@@ -37,12 +33,12 @@ class MailList extends Component {
     super(props);
     this.state = {
       selected: 0,
-      filter: {}
     };
     this.select = this.select.bind(this);
   }
 
   select(itemID) {
+    this.props.select(itemID);
     this.setState({ selected: itemID});
   }
 
@@ -50,47 +46,15 @@ class MailList extends Component {
     this.setState({filter: filter});
   }
 
-  get data(){
-    return [{
-      id: 1,
-      name: "Lisa Guerrero",
-      title: "Company Goals for 2016",
-      preview: "Hello everyone, i'm happy to share with you our new company goals",
-      date: "20:24",
-      tag: "green",
-      new: true
-    }, {
-      id: 2,
-      name:"Lisa Guerrero",
-      title:"Company Goals for 2016",
-      preview:"Hello everyone, i'm happy to share with you our new company goals",
-      date: "20:24",
-      tag: "purple",
-      new: true
-    }, {
-      id: 3,
-      name: "Peter Gregor",
-      title: "Design for health project",
-      preview: "Hi Jessica, I love your UI design work, and i'd like to talk with you",
-      date: "14:10",
-      tag: "green",
-      new: true
-    }, {
-      id: 4,
-      name: "Sara Richardson",
-      title: "Meeting Zurich",
-      preview: "Hi Jessica, I will be in Zurich tomorrow, hope we can meet there",
-      date: "17:10",
-      tag: "blue",
-      new: true
-    }];
-  }
-
   get dataItems(){
-    let data = _(this.data);
-    if(!_.isEmpty(this.state.filter)){
-      data = data.where(this.state.filter);
+    console.info(this.props)
+
+    let data = _(this.props.data);
+    if(!_.isEmpty(this.props.filter)){
+      data = data.filter((item) =>  this.props.filter.indexOf(item.tag) >= 0)
     }
+
+
 
     return data.value().map((item, key) =>
       <MailListItem
@@ -103,7 +67,6 @@ class MailList extends Component {
   }
 
   render() {
-    console.info('render', this.dataItems);
 
     return (
       <div className="col-2 panel list-panel">

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import {MailFilter , MailList} from './components';
+import { MailFilterData , MailListData } from './utils';
+import { MailFilter , MailList, MailDetail } from './components';
 import './App.css';
+import _ from 'lodash';
 
 import MailStore from './stores/MailStore';
 import MailListStore from './stores/MailListStore';
@@ -57,16 +59,41 @@ export class Application extends Component{
 
 
 
-var App = React.createClass({
+class App extends Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: MailListData.load(),
+      filter: [],
+      mail: null
+    }
+    this.filterMail = this.filterMail.bind(this);
+    this.selectMail = this.selectMail.bind(this);
+  }
+
+  filterMail(tags){
+    console.info('TAGS: ',tags)
+    this.setState({list: tags});
+  }
+
+  selectMail(id) {
+    let mail = _.find(this.state.list, {id});
+    mail.new = false;
+    this.setState({mail});
+  }
+
   render() {
+    console.info('RENDER: ', this.state.list)
+    console.info('SELECTED MAIL: ', this.state.mail)
     return(
       <div>
-        <MailFilter/>
-        <MailList/>
+        <MailFilter filter={this.filterMail}/>
+        <MailList data={this.state.list} select={this.selectMail} filter={this.state.filter}/>
+        <MailDetail mail={this.state.mail}/>
       </div>
     )
   }
-});
+};
 
 export default App;
 

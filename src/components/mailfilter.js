@@ -2,23 +2,32 @@ import React, { Component } from 'react';
 import Button from './button';
 
 export default class MailFilter extends Component {
+  constructor(props) {
+    super(props);
+    this.filter = this.filter.bind(this);
+  }
+
   get statusItems(){
     let data = [{
       color: 'orange',
-      name: 'Personal',
-      counter: 10
+      name: 'Travels',
+      counter: 10,
+      tags: ['latam', 'china', 'spain', 'green'],
     }, {
       color: 'green',
       name: 'Work',
-      counter: 10
+      counter: 10,
+      tags: ['work', 'job', 'keynote', 'boss', 'purple'],
     }, {
       color: 'purple',
       name: 'Friends',
-      counter: 10
+      counter: 10,
+      tags: ['friends', 'buddy', 'guys', 'green']
     }, {
       color: 'blue',
       name: 'Personal',
-      counter: 10
+      counter: 10,
+      tags: ['store', 'purchase', 'blue']
     }];
 
     return data.map((item, key) =>
@@ -28,8 +37,13 @@ export default class MailFilter extends Component {
       color={item.color}
       name={item.name}
       counter={item.counter}
+      filter={this.filter}
       />
     );
+  }
+
+  filter(tags) {
+    this.props.filter(tags)
   }
 
   render() {
@@ -79,7 +93,7 @@ export default class MailFilter extends Component {
 class MailStatus extends Component {
   render() {
     return (
-      <li>
+      <li onClick={() => this.props.filter(this.props.item.tags)}>
         <i className={`icon-circle color-${this.props.color}`}></i>
         <span className="name">{this.props.name}</span>
         <span className="counter">{this.props.counter}</span>
